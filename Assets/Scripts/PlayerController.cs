@@ -20,12 +20,27 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        float moveHorizontal = Input.GetAxis("Horizontal");
-        float moveVertical = Input.GetAxis("Vertical");
+        // 空中では操作不可
+        if(transform.position.y == 0.5f)
+        {
+            float moveHorizontal = Input.GetAxis("Horizontal");
+            float moveVertical = Input.GetAxis("Vertical");
+            float moveJump = 0.0f;
 
-        Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
+            // ジャンプ
+            if(Input.GetKeyDown("space"))
+            {
+                moveJump = 30.0f;
+            }
 
-        rb.AddForce(movement * speed);
+            Vector3 movement = new Vector3(moveHorizontal, moveJump, moveVertical);
+            rb.AddForce(movement * speed);
+        }
+        else if(transform.position.y < -10.0f)
+        {
+            rb.velocity = Vector3.zero;
+            transform.position = new Vector3(0.0f, 10.5f, 0.0f);
+        }
     }
 
     void OnTriggerEnter(Collider other)
