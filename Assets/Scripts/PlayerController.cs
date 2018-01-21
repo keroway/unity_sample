@@ -21,6 +21,10 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate()
     {
         // 空中では操作不可
+        // 以下の理由により本当は違う方法（地面との接触など）で判定を行うべき
+        // 1.float同士の==比較は誤字で一致しないかも
+        // 2.衝突判定次第で座標が安定しないかも
+        // 3.外へ飛び出た際、Y座標が一致すれば空中ジャンプ可能
         if(transform.position.y == 0.5f)
         {
             float moveHorizontal = Input.GetAxis("Horizontal");
@@ -33,7 +37,8 @@ public class PlayerController : MonoBehaviour
                 moveJump = 30.0f;
             }
 
-            Vector3 movement = new Vector3(moveHorizontal, moveJump, moveVertical);
+            Vector3 movement = 
+                new Vector3(moveHorizontal, moveJump, moveVertical);
             rb.AddForce(movement * speed);
         }
         else if(transform.position.y < -10.0f)
